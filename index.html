@@ -1,0 +1,1894 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ladycheck</title>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
+      background: #f6f7fb;
+      color: #1f2937;
+    }
+
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px 80px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: #eef2ff;
+      color: #4338ca;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 32px;
+      line-height: 1.2;
+    }
+
+    .sub {
+      margin: 0;
+      color: #6b7280;
+      line-height: 1.7;
+      max-width: 760px;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin: 24px 0 20px;
+    }
+
+    .info-card,
+    .compare-box,
+    .group-box {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 18px;
+      padding: 16px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+    }
+
+    .info-label {
+      margin: 0 0 8px;
+      font-size: 13px;
+      color: #6b7280;
+      font-weight: 700;
+    }
+
+    .info-value {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 800;
+      word-break: break-word;
+    }
+
+    .toolbar {
+      margin: 10px 0 18px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .search {
+      flex: 1;
+      min-width: 240px;
+      padding: 14px 16px;
+      border: 1px solid #d1d5db;
+      border-radius: 16px;
+      background: white;
+      font-size: 15px;
+      outline: none;
+    }
+
+    .search:focus,
+    .compare-textarea:focus {
+      border-color: #818cf8;
+      box-shadow: 0 0 0 4px rgba(129, 140, 248, 0.15);
+    }
+
+    .count {
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      border-radius: 16px;
+      background: white;
+      border: 1px solid #e5e7eb;
+      color: #4b5563;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .section-title {
+      margin: 28px 0 14px;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .fold-box {
+      margin-top: 28px;
+    }
+
+    .fold-box summary {
+      list-style: none;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .fold-box summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .fold-summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .fold-summary .section-title {
+      margin: 0;
+    }
+
+    .fold-arrow {
+      font-size: 14px;
+      color: #6b7280;
+      transition: transform 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .fold-box[open] .fold-arrow {
+      transform: rotate(180deg);
+    }
+
+    .fold-content {
+      margin-top: 14px;
+    }
+
+    .recent-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .recent-item {
+      display: inline-flex;
+      align-items: center;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: white;
+      border: 1px solid #e5e7eb;
+      color: #374151;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 700;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04);
+    }
+
+    .recent-item:hover {
+      transform: translateY(-1px);
+    }
+
+    .updated-list {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .updated-item {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 16px;
+      padding: 14px 16px;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04);
+    }
+
+    .updated-main {
+      font-size: 14px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0 0 6px;
+      word-break: break-all;
+    }
+
+    .updated-note {
+      margin: 0;
+      font-size: 13px;
+      color: #6b7280;
+      line-height: 1.5;
+      word-break: break-word;
+    }
+
+    .compare-box {
+      margin-top: 10px;
+    }
+
+    .compare-desc {
+      margin: 0 0 12px;
+      color: #6b7280;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .compare-textarea {
+      width: 100%;
+      min-height: 140px;
+      resize: vertical;
+      padding: 14px 16px;
+      border: 1px solid #d1d5db;
+      border-radius: 16px;
+      background: #fff;
+      font-size: 14px;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .compare-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .btn,
+    .btn-secondary {
+      border: none;
+      text-decoration: none;
+      padding: 11px 14px;
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: 700;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+
+    .btn {
+      background: #111827;
+      color: white;
+    }
+
+    .btn-secondary {
+      background: #eef2ff;
+      color: #4338ca;
+    }
+
+    .btn:hover,
+    .btn-secondary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 20px rgba(0,0,0,.08);
+    }
+
+    .compare-result {
+      margin-top: 14px;
+    }
+
+    .compare-result-count {
+      margin: 0 0 12px;
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .compare-result-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .group-list {
+      display: grid;
+      gap: 16px;
+    }
+
+    .group-title {
+      margin: 0 0 10px;
+      font-size: 16px;
+      font-weight: 800;
+      color: #4338ca;
+    }
+
+    .group-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .group-chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 9px 13px;
+      border-radius: 999px;
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+      color: #374151;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .list {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: 1fr;
+      margin-top: 14px;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 22px;
+      padding: 20px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .left {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .handle {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 800;
+      word-break: break-all;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      flex-shrink: 0;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 24px 20px;
+      border: 1px dashed #cbd5e1;
+      border-radius: 22px;
+      background: rgba(255,255,255,.8);
+      color: #6b7280;
+    }
+
+    .footer {
+      margin-top: 18px;
+      color: #9ca3af;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    @media (min-width: 900px) {
+      .list {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      h1 {
+        font-size: 38px;
+      }
+
+      .handle {
+        font-size: 24px;
+      }
+
+      .search {
+        max-width: 420px;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .wrap {
+        padding: 28px 16px 60px;
+      }
+
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .actions {
+        width: 100%;
+      }
+
+      .btn,
+      .btn-secondary {
+        flex: 1;
+        text-align: center;
+      }
+
+      h1 {
+        font-size: 26px;
+      }
+
+      .handle {
+        font-size: 20px;
+      }
+
+      .info-value {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <div class="badge">ladycheck</div>
+      <h1>레이디지키미 계정 리스트</h1>
+      <p class="sub">
+        레이디지키미에 올라온 계정들을 정리한 리스트입니다.<br>
+        지속적으로 업데이트되며, 제보는 스핀스핀으로 받고 있습니다.
+      </p>
+    </section>
+
+    <section class="info-grid">
+      <article class="info-card">
+        <p class="info-label">총 등록 계정</p>
+        <p class="info-value" id="totalCount">0명</p>
+      </article>
+      <article class="info-card">
+        <p class="info-label">최근 업데이트</p>
+        <p class="info-value" id="updatedDate">2026.04.11</p>
+      </article>
+      <article class="info-card">
+        <p class="info-label">최근 추가</p>
+        <p class="info-value" id="recentCount">0명</p>
+      </article>
+    </section>
+
+    <section>
+      <div class="toolbar">
+        <input id="searchInput" class="search" type="text" placeholder="아이디 검색" />
+        <div class="count" id="countBox">0개</div>
+      </div>
+    </section>
+
+    <details class="fold-box" open>
+      <summary class="fold-summary">
+        <h2 class="section-title">🆕 최근 추가된 계정</h2>
+        <span class="fold-arrow">▼</span>
+      </summary>
+      <div class="fold-content">
+        <div class="recent-list" id="recentList"></div>
+      </div>
+    </details>
+
+    <details class="fold-box">
+      <summary class="fold-summary">
+        <h2 class="section-title">🔄 최근 변경된 계정</h2>
+        <span class="fold-arrow">▼</span>
+      </summary>
+      <div class="fold-content">
+        <div class="updated-list" id="updatedList"></div>
+      </div>
+    </details>
+
+    <details class="fold-box">
+      <summary class="fold-summary">
+        <h2 class="section-title">🔍 내 팔로잉 대조하기</h2>
+        <span class="fold-arrow">▼</span>
+      </summary>
+      <div class="fold-content">
+        <div class="compare-box">
+          <p class="compare-desc">
+            팔로잉 목록의 아이디들을 복사해서 붙여넣어 보세요.<br>
+            줄바꿈, 쉼표, 공백으로 구분해도 자동으로 비교됩니다.
+          </p>
+          <textarea
+            id="compareInput"
+            class="compare-textarea"
+            placeholder="@아이디1&#10;@아이디2&#10;아이디3"
+          ></textarea>
+          <div class="compare-actions">
+            <button class="btn" id="compareBtn" type="button">대조하기</button>
+            <button class="btn-secondary" id="clearCompareBtn" type="button">지우기</button>
+          </div>
+          <div class="compare-result" id="compareResult"></div>
+        </div>
+      </div>
+    </details>
+
+    <details class="fold-box">
+      <summary class="fold-summary">
+        <h2 class="section-title">🔠 알파벳별 정리</h2>
+        <span class="fold-arrow">▼</span>
+      </summary>
+      <div class="fold-content">
+        <div class="group-box">
+          <div class="group-list" id="alphabetGroupList"></div>
+        </div>
+      </div>
+    </details>
+
+    <section>
+      <h2 class="section-title">📌 전체 계정 리스트</h2>
+      <div class="list" id="list"></div>
+    </section>
+
+    <p class="footer"></p>
+  </div>
+
+  <script>
+    // ✅ 직접 수정하는 부분
+    const lastUpdated = "2026.04.13";
+    const recentAddedCount = 0;
+
+    // ✅ 최근 변경된 계정
+    // note는 네가 직접 수정
+    const updatedAccounts = [
+  {
+    before: "@yeditor_j",
+    after: "@yeditor_i",
+    note: "아이디 변경"
+},  {
+    before: "@somewhere_1101",
+    after: "@withyoualways93",
+    note: "아이디 변경"
+  }
+];
+
+    // ✅ 기존 누적 리스트
+    const accounts1 = [
+      {
+        id: "@minto_000_",
+        accountUrl: "https://x.com/minto_000_"
+      },
+      {
+        id: "@Jeongsangin_XX",
+        accountUrl: "https://x.com/Jeongsangin_XX"
+      },
+      {
+        id: "@Cashwood_Eunni",
+        accountUrl: "https://x.com/Cashwood_Eunni"
+      },
+      {
+        id: "@seonationn",
+        accountUrl: "https://x.com/seonationn"
+      },
+      {
+        id: "@incredibleKEON",
+        accountUrl: "https://x.com/incredibleKEON"
+      },
+      {
+id: "@kuro_250317",
+accountUrl: "https://x.com/kuro_250317"
+},
+{
+id: "@norad1976",
+accountUrl: "https://x.com/norad1976"
+},
+{
+id: "@anam_note",
+accountUrl: "https://x.com/anam_note"
+},
+{
+id: "@eaterofkorea",
+accountUrl: "https://x.com/eaterofkorea"
+},
+{
+id: "@foreversj",
+accountUrl: "https://x.com/foreversj"
+},
+{
+id: "@leeace0",
+accountUrl: "https://x.com/leeace0"
+},
+{
+id: "@betterdaytomor",
+accountUrl: "https://x.com/betterdaytomor"
+},
+{
+id: "@uhzzulyo",
+accountUrl: "https://x.com/uhzzulyo"
+},
+{
+id: "@FenrirWhiteWolf",
+accountUrl: "https://x.com/FenrirWhiteWolf"
+},
+{
+id: "@celsus_lee",
+accountUrl: "https://x.com/celsus_lee"
+},
+{
+id: "@Jyky31133851",
+accountUrl: "https://x.com/Jyky31133851"
+},
+{
+id: "@Bcutstudio",
+accountUrl: "https://x.com/Bcutstudio"
+},
+{
+id: "@x_rising_star",
+accountUrl: "https://x.com/x_rising_star"
+},
+{
+id: "@o0po0p77",
+accountUrl: "https://x.com/o0po0p77"
+},
+{
+id: "@AnonDubu",
+accountUrl: "https://x.com/AnonDubu"
+},
+{
+id: "@Truthmind2",
+accountUrl: "https://x.com/Truthmind2"
+},
+{
+id: "@jinjinjala6024",
+accountUrl: "https://x.com/jinjinjala6024"
+},
+{
+id: "@imnotjaenney",
+accountUrl: "https://x.com/imnotjaenney"
+},
+{
+id: "@Jjanggubro0206",
+accountUrl: "https://x.com/Jjanggubro0206"
+},
+{
+id: "@captno1",
+accountUrl: "https://x.com/captno1"
+},
+{
+id: "@haeundae_kim",
+accountUrl: "https://x.com/haeundae_kim"
+},
+{
+id: "@GreatJabez",
+accountUrl: "https://x.com/GreatJabez"
+},
+{
+id: "@myproteinthief",
+accountUrl: "https://x.com/myproteinthief"
+},
+{
+id: "@inkearner",
+accountUrl: "https://x.com/inkearner"
+},
+{
+id: "@squrepencilcase",
+accountUrl: "https://x.com/squrepencilcase"
+},
+{
+id: "@money664471",
+accountUrl: "https://x.com/money664471"
+},
+{
+id: "@dexibu2580",
+accountUrl: "https://x.com/dexibu2580"
+},
+{
+id: "@blackcow1210",
+accountUrl: "https://x.com/blackcow1210"
+},
+{
+id: "@Paper_Master_",
+accountUrl: "https://x.com/Paper_Master_"
+},
+{
+id: "@isususuper",
+accountUrl: "https://x.com/isususuper"
+},
+{
+id: "@Xpeldown",
+accountUrl: "https://x.com/Xpeldown"
+},
+{
+id: "@Re_boother",
+accountUrl: "https://x.com/Re_boother"
+},
+{
+id: "@wisdombest01",
+accountUrl: "https://x.com/wisdombest01"
+},
+{
+id: "@ovohhh8818",
+accountUrl: "https://x.com/ovohhh8818"
+},
+{
+id: "@odumaknim",
+accountUrl: "https://x.com/odumaknim"
+},
+{
+id: "@solitaryhotgirl",
+accountUrl: "https://x.com/solitaryhotgirl"
+},
+{
+id: "@rlaehdbs1395",
+accountUrl: "https://x.com/rlaehdbs1395"
+},
+{
+id: "@hammycloud22",
+accountUrl: "https://x.com/hammycloud22"
+},
+{
+id: "@Koreawomanking",
+accountUrl: "https://x.com/Koreawomanking"
+},
+{
+id: "@dddrs8z11",
+accountUrl: "https://x.com/dddrs8z11"
+},
+{
+id: "@Crystaltech1004",
+accountUrl: "https://x.com/Crystaltech1004"
+},
+{
+id: "@mindwhisper123",
+accountUrl: "https://x.com/mindwhisper123"
+},
+{
+id: "@jang_merry",
+accountUrl: "https://x.com/jang_merry"
+},
+{
+id: "@sseogi_",
+accountUrl: "https://x.com/sseogi_"
+},
+{
+id: "@yhkim1211",
+accountUrl: "https://x.com/yhkim1211"
+},
+{
+id: "@JamesJe81857332",
+accountUrl: "https://x.com/JamesJe81857332"
+},
+{
+id: "@jsmart9708",
+accountUrl: "https://x.com/jsmart9708"
+},
+{
+id: "@gardeny21",
+accountUrl: "https://x.com/gardeny21"
+},
+{
+id: "@jjanggumoney",
+accountUrl: "https://x.com/jjanggumoney"
+},
+{
+id: "@dailyruncat",
+accountUrl: "https://x.com/dailyruncat"
+},
+{
+id: "@return_J_J",
+accountUrl: "https://x.com/return_J_J"
+},
+{
+id: "@su68172su",
+accountUrl: "https://x.com/su68172su"
+},
+{
+id: "@animuspurus",
+accountUrl: "https://x.com/animuspurus"
+},
+{
+id: "@waaaangsu",
+accountUrl: "https://x.com/waaaangsu"
+},
+{
+id: "@afodite82",
+accountUrl: "https://x.com/afodite82"
+},
+{
+id: "@hayan_yul",
+accountUrl: "https://x.com/hayan_yul"
+},
+{
+id: "@zennie17x",
+accountUrl: "https://x.com/zennie17x"
+},
+{
+id: "@zipbaab",
+accountUrl: "https://x.com/zipbaab"
+},
+{
+id: "@loveaselin",
+accountUrl: "https://x.com/loveaselin"
+},
+{
+id: "@hyeony24789",
+accountUrl: "https://x.com/hyeony24789"
+},
+{
+id: "@sung_pure",
+accountUrl: "https://x.com/sung_pure"
+},
+{
+id: "@dansaeu47840",
+accountUrl: "https://x.com/dansaeu47840"
+},
+{
+id: "@WildGeun",
+accountUrl: "https://x.com/WildGeun"
+},
+{
+id: "@rlaehdbs1395",
+accountUrl: "https://x.com/rlaehdbs1395"
+},
+{
+id: "@jangkku920",
+accountUrl: "https://x.com/jangkku920"
+},
+{
+id: "@debsidney29",
+accountUrl: "https://x.com/debsidney29"
+},
+{
+id: "@nyse_min",
+accountUrl: "https://x.com/nyse_min"
+},
+{
+id: "@juanworld",
+accountUrl: "https://x.com/juanworld"
+},
+{
+id: "@TheObserverLee",
+accountUrl: "https://x.com/TheObserverLee"
+},{
+  id: "@hwani1589802",
+  accountUrl: "https://x.com/hwani1589802"
+},{
+  id: "@wrightforstudy",
+  accountUrl: "https://x.com/wrightforstudy"
+},{
+  id: "@vivleon_labs",
+  accountUrl: "https://x.com/vivleon_labs"
+},{
+  id: "@Heesoo_sihyun",
+  accountUrl: "https://x.com/Heesoo_sihyun"
+},{
+  id: "@taedogabon30221",
+  accountUrl: "https://x.com/taedogabon30221"
+},{
+  id: "@foreversj",
+  accountUrl: "https://x.com/foreversj"
+},{
+  id: "@dafne8884",
+  accountUrl: "https://x.com/dafne8884"
+},{
+  id: "@mimiblue3589",
+  accountUrl: "https://x.com/mimiblue3589"
+},{
+  id: "@T63354A10905884",
+  accountUrl: "https://x.com/T63354A10905884"
+},{
+  id: "@gyeon_baeg",
+  accountUrl: "https://x.com/gyeon_baeg"
+},{
+  id: "@gyeon_baeg2",
+  accountUrl: "https://x.com/gyeon_baeg2"
+},{
+  id: "@hise3a",
+  accountUrl: "https://x.com/hise3a"
+},{
+  id: "@dailyruncat",
+  accountUrl: "https://x.com/dailyruncat"
+},{
+  id: "@gitae99074",
+  accountUrl: "https://x.com/gitae99074"
+},{
+  id: "@wybxrd",
+  accountUrl: "https://x.com/wybxrd"
+},{
+  id: "@cz2podkpt3gcp5w",
+  accountUrl: "https://x.com/cz2podkpt3gcp5w"
+},{
+  id: "@seonationn",
+  accountUrl: "https://x.com/seonationn"
+},{
+  id: "@dolosi79",
+  accountUrl: "https://x.com/dolosi79"
+},{
+  id: "@d0619b",
+  accountUrl: "https://x.com/d0619b"
+},{
+  id: "@wbmom_",
+  accountUrl: "https://x.com/wbmom_"
+},{
+  id: "@zipbaab",
+  accountUrl: "https://x.com/zipbaab"
+},{
+  id: "@ilpyung98",
+  accountUrl: "https://x.com/ilpyung98"
+},{
+  id: "@youngway_bbi",
+  accountUrl: "https://x.com/youngway_bbi"
+},{
+  id: "@MINJJIN0513",
+  accountUrl: "https://x.com/MINJJIN0513"
+},{
+  id: "@rlaehdbs1395",
+  accountUrl: "https://x.com/rlaehdbs1395"
+},{
+  id: "@Shawklnlqeekn",
+  accountUrl: "https://x.com/Shawklnlqeekn"
+},{
+  id: "@buyfunzofficial",
+  accountUrl: "https://x.com/buyfunzofficial"
+},{
+  id: "@Shin_chan911",
+  accountUrl: "https://x.com/Shin_chan911"
+},{
+  id: "@PingMajor33912",
+  accountUrl: "https://x.com/PingMajor33912"
+},{
+  id: "@reisen3",
+  accountUrl: "https://x.com/reisen3"
+},{
+  id: "@Philosoraptor_V",
+  accountUrl: "https://x.com/Philosoraptor_V"
+},{
+  id: "@Dorobo_Ya",
+  accountUrl: "https://x.com/Dorobo_Ya"
+},{
+  id: "@texaniowan",
+  accountUrl: "https://x.com/texaniowan"
+},{
+  id: "@saltjung77",
+  accountUrl: "https://x.com/saltjung77"
+},{
+  id: "@afodite82",
+  accountUrl: "https://x.com/afodite82"
+},{
+  id: "@1percent_story",
+  accountUrl: "https://x.com/1percent_story"
+},{
+  id: "@admi_alts",
+  accountUrl: "https://x.com/admi_alts"
+},{
+  id: "@judgekyo12",
+  accountUrl: "https://x.com/judgekyo12"
+},{
+  id: "@jjang9_19",
+  accountUrl: "https://x.com/jjang9_19"
+},{
+  id: "@skoshi2033",
+  accountUrl: "https://x.com/skoshi2033"
+},{
+  id: "@godmulzoo",
+  accountUrl: "https://x.com/godmulzoo"
+},{
+  id: "@Dororong_X",
+  accountUrl: "https://x.com/Dororong_X"
+},{
+  id: "@kkumon_s",
+  accountUrl: "https://x.com/kkumon_s"
+},{
+  id: "@hammycloud22",
+  accountUrl: "https://x.com/hammycloud22"
+},{
+  id: "@cz_llxy",
+  accountUrl: "https://x.com/cz_llxy"
+},{
+  id: "@tradeonthecliff",
+  accountUrl: "https://x.com/tradeonthecliff"
+},{
+  id: "@Jeongsangin_XX",
+  accountUrl: "https://x.com/Jeongsangin_XX"
+},{
+  id: "@mentallogj",
+  accountUrl: "https://x.com/mentallogj"
+},{
+  id: "@withyoualways93",
+  accountUrl: "https://x.com/withyoualways93"
+},{
+  id: "@dangjungdo1122",
+  accountUrl: "https://x.com/dangjungdo1122"
+},{
+  id: "@TOSIO_korea",
+  accountUrl: "https://x.com/TOSIO_korea"
+},{
+  id: "@TraderLoopy",
+  accountUrl: "https://x.com/TraderLoopy"
+},{
+  id: "@harryqueenz",
+  accountUrl: "https://x.com/harryqueenz"
+},{
+  id: "@Investor_Kalak",
+  accountUrl: "https://x.com/Investor_Kalak"
+},{
+  id: "@MinnyAhn",
+  accountUrl: "https://x.com/MinnyAhn"
+},{
+  id: "@HiddenDeals44",
+  accountUrl: "https://x.com/HiddenDeals44"
+},{
+  id: "@umining90",
+  accountUrl: "https://x.com/umining90"
+},{
+  id: "@run_nonstop",
+  accountUrl: "https://x.com/run_nonstop"
+},{
+  id: "@jinhee87139356",
+  accountUrl: "https://x.com/jinhee87139356"
+},{
+  id: "@Argent_wave",
+  accountUrl: "https://x.com/Argent_wave"
+},{
+  id: "@BlackSandStocks",
+  accountUrl: "https://x.com/BlackSandStocks"
+},{
+  id: "@kjh7897",
+  accountUrl: "https://x.com/kjh7897"
+},{
+  id: "@Re_boother",
+  accountUrl: "https://x.com/Re_boother"
+},{
+  id: "@thesoohaa",
+  accountUrl: "https://x.com/thesoohaa"
+},{
+  id: "@munse1234",
+  accountUrl: "https://x.com/munse1234"
+},{
+  id: "@lament1610",
+  accountUrl: "https://x.com/lament1610"
+},{
+  id: "@mysalt",
+  accountUrl: "https://x.com/mysalt"
+},{
+  id: "@sangbeomkim80",
+  accountUrl: "https://x.com/sangbeomkim80"
+},{
+  id: "@resting_boi",
+  accountUrl: "https://x.com/resting_boi"
+},{
+  id: "@bola72273711318",
+  accountUrl: "https://x.com/bola72273711318"
+},{
+  id: "@a33538443",
+  accountUrl: "https://x.com/a33538443"
+},{
+  id: "@Doctoroh1",
+  accountUrl: "https://x.com/Doctoroh1"
+},{
+  id: "@yongsseu2",
+  accountUrl: "https://x.com/yongsseu2"
+},{
+  id: "@dolosi79",
+  accountUrl: "https://x.com/dolosi79"
+},{
+  id: "@wkdhong123",
+  accountUrl: "https://x.com/wkdhong123"
+},{
+  id: "@withoutmell",
+  accountUrl: "https://x.com/withoutmell"
+},{
+  id: "@___jjaymm",
+  accountUrl: "https://x.com/___jjaymm"
+},{
+  id: "@7179k_garret",
+  accountUrl: "https://x.com/7179k_garret"
+},{
+  id: "@joshua2070",
+  accountUrl: "https://x.com/joshua2070"
+},{
+  id: "@mankkamju",
+  accountUrl: "https://x.com/mankkamju"
+},{
+  id: "@hyo03044",
+  accountUrl: "https://x.com/hyo03044"
+},{
+  id: "@tkddud957",
+  accountUrl: "https://x.com/tkddud957"
+},{
+  id: "@TX_Daddy87",
+  accountUrl: "https://x.com/TX_Daddy87"
+},{
+  id: "@Crystaltech1004",
+  accountUrl: "https://x.com/Crystaltech1004"
+},{
+  id: "@gimhyeongj2357",
+  accountUrl: "https://x.com/gimhyeongj2357"
+},{
+  id: "@psy6301",
+  accountUrl: "https://x.com/psy6301"
+},{
+  id: "@foreversj",
+  accountUrl: "https://x.com/foreversj"
+},{
+  id: "@jjanggumoney",
+  accountUrl: "https://x.com/jjanggumoney"
+},{
+  id: "@FD5466",
+  accountUrl: "https://x.com/FD5466"
+},{
+  id: "@toss_911",
+  accountUrl: "https://x.com/toss_911"
+},{
+  id: "@4sektb",
+  accountUrl: "https://x.com/4sektb"
+},{
+  id: "@backcop",
+  accountUrl: "https://x.com/backcop"
+},{
+  id: "@LeeJH_GT1210",
+  accountUrl: "https://x.com/LeeJH_GT1210"
+},{
+  id: "@eagle8328",
+  accountUrl: "https://x.com/eagle8328"
+},{
+  id: "@eugene77love",
+  accountUrl: "https://x.com/eugene77love"
+},{
+  id: "@ssangbuk",
+  accountUrl: "https://x.com/ssangbuk"
+},{
+  id: "@secret2580g",
+  accountUrl: "https://x.com/secret2580g"
+},{
+  id: "@Cashwood_Eunni",
+  accountUrl: "https://x.com/Cashwood_Eunni"
+},{
+  id: "@seonationn",
+  accountUrl: "https://x.com/seonationn"
+},{
+  id: "@nonosucker",
+  accountUrl: "https://x.com/nonosucker"
+},{
+  id: "@0happyjin00",
+  accountUrl: "https://x.com/0happyjin00"
+},{
+  id: "@576ANnLpKWRSKta",
+  accountUrl: "https://x.com/576ANnLpKWRSKta"
+},{
+  id: "@panloveendure",
+  accountUrl: "https://x.com/panloveendure"
+},{
+  id: "@Lux_2100",
+  accountUrl: "https://x.com/Lux_2100"
+},{
+  id: "@Despairstory",
+  accountUrl: "https://x.com/Despairstory"
+},{
+  id: "@stone_kr69212",
+  accountUrl: "https://x.com/stone_kr69212"
+},{
+  id: "@piteolinchi",
+  accountUrl: "https://x.com/piteolinchi"
+},{
+  id: "@queenbee_korea",
+  accountUrl: "https://x.com/queenbee_korea"
+},{
+  id: "@Wonjamong_11",
+  accountUrl: "https://x.com/Wonjamong_11"
+},{
+  id: "@allesgut25",
+  accountUrl: "https://x.com/allesgut25"
+},{
+  id: "@thisisjason25",
+  accountUrl: "https://x.com/thisisjason25"
+},{
+  id: "@chap_ssal2cute",
+  accountUrl: "https://x.com/chap_ssal2cute"
+},{
+  id: "@yeditor_i",
+  accountUrl: "https://x.com/@yeditor_i"
+},{
+  id: "@jeonggyeon83062",
+  accountUrl: "https://x.com/jeonggyeon83062"
+},{
+  id: "@search001007",
+  accountUrl: "https://x.com/search001007"
+},{
+  id: "@bly200508",
+  accountUrl: "https://x.com/bly200508"
+},{
+  id: "@MisTRaL_BR",
+  accountUrl: "https://x.com/MisTRaL_BR"
+},{
+  id: "@jang_merry",
+  accountUrl: "https://x.com/jang_merry"
+},{
+  id: "@shinjuzzang",
+  accountUrl: "https://x.com/shinjuzzang"
+},{
+  id: "@TLEROY5",
+  accountUrl: "https://x.com/TLEROY5"
+},{
+  id: "@9eoln",
+  accountUrl: "https://x.com/9eoln"
+},{
+  id: "@US_STOCK_LOVE",
+  accountUrl: "https://x.com/US_STOCK_LOVE"
+},{
+  id: "@Gonggle_Grrr",
+  accountUrl: "https://x.com/Gonggle_Grrr"
+},{
+  id: "@MyGlory_Days",
+  accountUrl: "https://x.com/MyGlory_Days"
+},{
+  id: "@BuzziBurger",
+  accountUrl: "https://x.com/BuzziBurger"
+},{
+  id: "@stocktrainkorea",
+  accountUrl: "https://x.com/stocktrainkorea"
+},{
+  id: "@1111_zip",
+  accountUrl: "https://x.com/1111_zip"
+},{
+  id: "@snsapple",
+  accountUrl: "https://x.com/snsapple"
+},{
+  id: "@cowcowverycow",
+  accountUrl: "https://x.com/cowcowverycow"
+},{
+  id: "@coinfinty",
+  accountUrl: "https://x.com/coinfinty"
+},{
+  id: "@ttotto_papa",
+  accountUrl: "https://x.com/ttotto_papa"
+},{
+  id: "@myurad1203",
+  accountUrl: "https://x.com/myurad1203"
+},{
+  id: "@bagjuyeon987854",
+  accountUrl: "https://x.com/bagjuyeon987854"
+},{
+  id: "@0101ljg",
+  accountUrl: "https://x.com/0101ljg"
+},{
+  id: "@w79xcddwrr",
+  accountUrl: "https://x.com/w79xcddwrr"
+},{
+  id: "@Junho0811",
+  accountUrl: "https://x.com/Junho0811"
+},{
+  id: "@yagadaking",
+  accountUrl: "https://x.com/yagadaking"
+},{
+  id: "@cd_danilove",
+  accountUrl: "https://x.com/cd_danilove"
+},{
+  id: "@wntttttlr",
+  accountUrl: "https://x.com/wntttttlr"
+},{
+  id: "@whitefox20c",
+  accountUrl: "https://x.com/whitefox20c"
+},{
+  id: "@sunpaul68",
+  accountUrl: "https://x.com/sunpaul68"
+},
+{
+  id: "@misskoreamk",
+  accountUrl: "https://x.com/misskoreamk"
+},
+{
+  id: "@labbuuuuuuu",
+  accountUrl: "https://x.com/labbuuuuuuu"
+},
+{
+  id: "@GeniusItem7",
+  accountUrl: "https://x.com/GeniusItem7"
+},
+{
+  id: "@real_nanjangpan",
+  accountUrl: "https://x.com/real_nanjangpan"
+},
+{
+  id: "@Maringko",
+  accountUrl: "https://x.com/Maringko"
+},
+{
+  id: "@baoxwow777",
+  accountUrl: "https://x.com/baoxwow777"
+},
+{
+  id: "@GOGi_Da",
+  accountUrl: "https://x.com/GOGi_Da"
+},
+{
+  id: "@wish61019",
+  accountUrl: "https://x.com/wish61019"
+},
+{
+  id: "@Joyful_Bee_",
+  accountUrl: "https://x.com/Joyful_Bee_"
+},
+{
+  id: "@biojuho",
+  accountUrl: "https://x.com/biojuho"
+},
+{
+  id: "@Junewoo_papa",
+  accountUrl: "https://x.com/Junewoo_papa"
+},
+{
+  id: "@fdjno21",
+  accountUrl: "https://x.com/fdjno21"
+},
+{
+  id: "@raccoonis100",
+  accountUrl: "https://x.com/raccoonis100"
+},
+{
+  id: "@dobu1293866",
+  accountUrl: "https://x.com/dobu1293866"
+},
+{
+  id: "@baggydadjeans",
+  accountUrl: "https://x.com/baggydadjeans"
+},
+{
+  id: "@dddrs8z11",
+  accountUrl: "https://x.com/dddrs8z11"
+},
+{
+  id: "@Bitchimpanzee",
+  accountUrl: "https://x.com/Bitchimpanzee"
+},
+{
+  id: "@Ashok21619",
+  accountUrl: "https://x.com/Ashok21619"
+},
+{
+  id: "@sisiro77",
+  accountUrl: "https://x.com/sisiro77"
+},
+{
+  id: "@sandapandabunda",
+  accountUrl: "https://x.com/sandapandabunda"
+},{
+    id: "@prettybat",
+    accountUrl: "https://x.com/prettybat"
+  },
+  {
+    id: "@spotifylll",
+    accountUrl: "https://x.com/spotifylll"
+  },
+{
+    id: "@Profit_Lx",
+    accountUrl: "https://x.com/Profit_Lx"
+  },{
+  id: "@santatellhuruku",
+  accountUrl: "https://x.com/santatellhuruku"
+},{
+  id: "@um_pp2",
+  accountUrl: "https://x.com/um_pp2"
+},{
+  id: "@meron_chama",
+  accountUrl: "https://x.com/meron_chama"
+},{
+  id: "@Rhayuumi",
+  accountUrl: "https://x.com/Rhayuumi"
+},{
+  id: "@davidhuang96",
+  accountUrl: "https://x.com/davidhuang96"
+},{
+  id: "@Daporiii",
+  accountUrl: "https://x.com/Daporiii"
+},{
+  id: "@min1546574",
+  accountUrl: "https://x.com/min1546574"
+},{
+    id: "@heemiiiin000",
+    accountUrl: "https://x.com/heemiiiin000"
+  },{
+    id: "@sunn9790",
+    accountUrl: "https://x.com/sunn9790"
+  },{
+    id: "@RachelL11179070",
+    accountUrl: "https://x.com/RachelL11179070"
+  },{
+    id: "@non_no_s_gf",
+    accountUrl: "https://x.com/non_no_s_gf"
+  },{
+    id: "@writer_oft",
+    accountUrl: "https://x.com/writer_oft"
+  },{
+    id: "@kachamom",
+    accountUrl: "https://x.com/kachamom"
+  },{
+    id: "@heajin98",
+    accountUrl: "https://x.com/heajin98"
+  },{
+    id: "@TSLA_Bitcoin",
+    accountUrl: "https://x.com/TSLA_Bitcoin"
+  },{
+    id: "@tiaaaooow",
+    accountUrl: "https://x.com/tiaaaooow"
+  },{
+    id: "@dreamtokki",
+    accountUrl: "https://x.com/dreamtokki"
+  },{
+    id: "@SpaceXonMars",
+    accountUrl: "https://x.com/SpaceXonMars"
+  },{
+    id: "@Denver0618",
+    accountUrl: "https://x.com/Denver0618"
+  },{
+    id: "@geuleibaeg86926",
+    accountUrl: "https://x.com/geuleibaeg86926"
+  },{
+    id: "@Sun_eggegg",
+    accountUrl: "https://x.com/Sun_eggegg"
+  },{
+    id: "@iqbyk7",
+    accountUrl: "https://x.com/iqbyk7"
+  },{
+    id: "@snake___tongue",
+    accountUrl: "https://x.com/snake___tongue"
+  },{
+    id: "@NeungGuleo60007",
+    accountUrl: "https://x.com/NeungGuleo60007"
+  },{
+    id: "@AgainFreeKorea",
+    accountUrl: "https://x.com/AgainFreeKorea"
+  },{
+    id: "@TokkiHibiki",
+    accountUrl: "https://x.com/TokkiHibiki"
+  },{
+    id: "@Wuk1855381",
+    accountUrl: "https://x.com/Wuk1855381"
+  },{
+    id: "@tenzi1994",
+    accountUrl: "https://x.com/tenzi1994"
+  },{
+    id: "@artandm0re",
+    accountUrl: "https://x.com/artandm0re"
+  },{
+    id: "@Real_Matjyo",
+    accountUrl: "https://x.com/Real_Matjyo"
+  },{
+    id: "@oomneon",
+    accountUrl: "https://x.com/oomneon"
+  },{
+    id: "@Minjun_6",
+    accountUrl: "https://x.com/Minjun_6"
+  },{
+    id: "@zlwm2125",
+    accountUrl: "https://x.com/zlwm2125"
+  },{
+    id: "@uuiuu11211",
+    accountUrl: "https://x.com/uuiuu11211"
+  },{
+    id: "@REAL_GOMGOM",
+    accountUrl: "https://x.com/REAL_GOMGOM"
+  },{
+    id: "@shutup__slump",
+    accountUrl: "https://x.com/shutup__slump"
+  },{
+    id: "@ginjotosi73",
+    accountUrl: "https://x.com/ginjotosi73"
+  },{
+    id: "@co62462124",
+    accountUrl: "https://x.com/co62462124"
+  },{
+    id: "@Mirua1004",
+    accountUrl: "https://x.com/Mirua1004"
+  },{
+    id: "@64bitcoinkr",
+    accountUrl: "https://x.com/64bitcoinkr"
+  },{
+    id: "@Limi_iil",
+    accountUrl: "https://x.com/Limi_iil"
+  },{
+    id: "@tenzi1994",
+    accountUrl: "https://x.com/tenzi1994"
+  },{
+    id: "@sonsarang3814",
+    accountUrl: "https://x.com/sonsarang3814"
+  },{
+    id: "@q1fxdfx",
+    accountUrl: "https://x.com/q1fxdfx"
+  },{
+    id: "@lbg00099",
+    accountUrl: "https://x.com/lbg00099"
+  },{
+    id: "@kim_to91752",
+    accountUrl: "https://x.com/kim_to91752"
+  },{
+    id: "@heavent0208",
+    accountUrl: "https://x.com/heavent0208"
+  },{
+    id: "@sane_hatter",
+    accountUrl: "https://x.com/sane_hatter"
+  },{
+    id: "@Qmark_killer",
+    accountUrl: "https://x.com/Qmark_killer"
+  },{
+    id: "@The_truth_eye",
+    accountUrl: "https://x.com/The_truth_eye"
+  },{
+    id: "@Will_Son_2030",
+    accountUrl: "https://x.com/Will_Son_2030"
+  },{
+    id: "@kimkimkim_12345",
+    accountUrl: "https://x.com/kimkimkim_12345"
+  },{
+    id: "@Patriot_KR",
+    accountUrl: "https://x.com/Patriot_KR"
+  },{
+    id: "@lkitaek79",
+    accountUrl: "https://x.com/lkitaek79"
+  },{
+    id: "@KoreaBrief",
+    accountUrl: "https://x.com/KoreaBrief"
+  },{
+    id: "@diablo54960624",
+    accountUrl: "https://x.com/diablo54960624"
+  },{
+    id: "@RichCucumber_",
+    accountUrl: "https://x.com/RichCucumber_"
+  },{
+    id: "@Wuk1855381",
+    accountUrl: "https://x.com/Wuk1855381"
+  },{
+    id: "@mmiiyyuu0O0",
+    accountUrl: "https://x.com/mmiiyyuu0O0"
+  },{
+    id: "@jongy064",
+    accountUrl: "https://x.com/jongy064"
+  },{
+    id: "@chosanghyeon68",
+    accountUrl: "https://x.com/chosanghyeon68"
+  },{
+    id: "@Familiy_LEE",
+    accountUrl: "https://x.com/Familiy_LEE"
+  },{
+    id: "@hera2257a",
+    accountUrl: "https://x.com/hera2257a"
+  },{
+    id: "@wjdtlsckcu",
+    accountUrl: "https://x.com/wjdtlsckcu"
+  },{
+    id: "@hjhjhjhjhjwhjw",
+    accountUrl: "https://x.com/hjhjhjhjhjwhjw"
+  },{
+    id: "@Lucky_noda",
+    accountUrl: "https://x.com/Lucky_noda"
+  },{
+    id: "@fourlegs_GHOTI",
+    accountUrl: "https://x.com/fourlegs_GHOTI"
+  },{
+    id: "@rushviii",
+    accountUrl: "https://x.com/rushviii"
+  },{
+    id: "@newswhoare",
+    accountUrl: "https://x.com/newswhoare"
+  },{
+    id: "@qvfBDcNvL6l2wX",
+    accountUrl: "https://x.com/qvfBDcNvL6l2wX"
+  },{
+    id: "@00wecandoit00",
+    accountUrl: "https://x.com/00wecandoit00"
+  },{
+    id: "@chocbi13",
+    accountUrl: "https://x.com/chocbi13"
+  },{
+    id: "@o_O_0_uuu",
+    accountUrl: "https://x.com/o_O_0_uuu"
+  },{
+    id: "@Greenyea6",
+    accountUrl: "https://x.com/Greenyea6"
+},{
+    id: "@Greenyea6",
+    accountUrl: "https://x.com/Greenyea6"
+  },{
+    id: "@jimi8324",
+    accountUrl: "https://x.com/jimi8324"
+  },{
+    id: "@anam_note",
+    accountUrl: "https://x.com/anam_note"
+  },{
+    id: "@mensan_x",
+    accountUrl: "https://x.com/mensan_x"
+  },{
+    id: "@junseob0017",
+    accountUrl: "https://x.com/junseob0017"
+},{
+    id: "@Dolcong_papa",
+    accountUrl: "https://x.com/Dolcong_papa"
+  },{
+    id: "@ceolmh3",
+    accountUrl: "https://x.com/ceolmh3"
+  },{
+    id: "@returncong22",
+    accountUrl: "https://x.com/returncong22"
+  },{
+    id: "@ljwoooo5801",
+    accountUrl: "https://x.com/ljwoooo5801"
+  },{
+    id: "@ORI3511",
+    accountUrl: "https://x.com/ORI3511"
+  },{
+    id: "@joayoon3",
+    accountUrl: "https://x.com/joayoon3"
+  },{
+    id: "@random7bit",
+    accountUrl: "https://x.com/random7bit"
+  },{
+    id: "@KwonWoo77155",
+    accountUrl: "https://x.com/KwonWoo77155"
+  }
+    ];
+
+    // ✅ 최근 추가 리스트
+    const accounts2 = [
+      // 
+      {
+    id: "@zzal190524",
+    accountUrl: "https://x.com/zzal190524"
+  },{
+    id: "@sonuujjawal26",
+    accountUrl: "https://x.com/sonuujjawal26"
+  },{
+    id: "@koreanBT_",
+    accountUrl: "https://x.com/koreanBT_"
+  },{
+    id: "@destinysdesire_",
+    accountUrl: "https://x.com/destinysdesire_"
+  },{
+    id: "@Kim489397813205",
+    accountUrl: "https://x.com/Kim489397813205"
+  },{
+    id: "@Billionaire_isB",
+    accountUrl: "https://x.com/Billionaire_isB"
+  },{
+    id: "@taimagironsitai",
+    accountUrl: "https://x.com/taimagironsitai"
+  },{
+    id: "@JHPark00700",
+    accountUrl: "https://x.com/JHPark00700"
+  },{
+    id: "@jentile33",
+    accountUrl: "https://x.com/jentile33"
+  },{
+    id: "@fdjno21",
+    accountUrl: "https://x.com/fdjno21"
+  },{
+    id: "@lmc8710",
+    accountUrl: "https://x.com/lmc8710"
+  },{
+    id: "@SoWhatxx7777",
+    accountUrl: "https://x.com/SoWhatxx7777"
+  },{
+    id: "@chrlflsdkwo",
+    accountUrl: "https://x.com/chrlflsdkwo"
+  },{
+    id: "@mjy8211",
+    accountUrl: "https://x.com/mjy8211"
+  },{
+    id: "@HelelelIng",
+    accountUrl: "https://x.com/HelelelIng"
+  },{
+    id: "@Shinjinmoon",
+    accountUrl: "https://x.com/Shinjinmoon"
+  },{
+    id: "@geekstagram_",
+    accountUrl: "https://x.com/geekstagram_"
+  }
+    ];
+
+    const accounts = [...accounts1, ...accounts2];
+
+    const list = document.getElementById('list');
+    const searchInput = document.getElementById('searchInput');
+    const countBox = document.getElementById('countBox');
+    const totalCount = document.getElementById('totalCount');
+    const updatedDate = document.getElementById('updatedDate');
+    const recentCount = document.getElementById('recentCount');
+    const recentList = document.getElementById('recentList');
+    const updatedList = document.getElementById('updatedList');
+
+    const compareInput = document.getElementById('compareInput');
+    const compareBtn = document.getElementById('compareBtn');
+    const clearCompareBtn = document.getElementById('clearCompareBtn');
+    const compareResult = document.getElementById('compareResult');
+    const alphabetGroupList = document.getElementById('alphabetGroupList');
+
+    function normalizeId(value) {
+      return String(value).trim().replace(/^@+/, '').toLowerCase();
+    }
+
+    function getUniqueAccounts(items) {
+      const uniqueMap = new Map();
+
+      items.forEach(item => {
+        const key = normalizeId(item.id);
+        if (!uniqueMap.has(key)) {
+          uniqueMap.set(key, item);
+        }
+      });
+
+      return Array.from(uniqueMap.values());
+    }
+
+    function getSortedAccounts(items) {
+      return [...items].sort((a, b) => {
+        const aId = normalizeId(a.id);
+        const bId = normalizeId(b.id);
+        return aId.localeCompare(bId, 'en', { sensitivity: 'base' });
+      });
+    }
+
+    function getGroupKey(id) {
+      const normalized = normalizeId(id);
+      const firstChar = normalized.charAt(0).toUpperCase();
+      return /^[A-Z]$/.test(firstChar) ? firstChar : '#';
+    }
+
+    function renderRecent() {
+      const uniqueRecent = getUniqueAccounts(accounts2).slice(-20).reverse();
+
+      recentCount.textContent = `${recentAddedCount}명`;
+      updatedDate.textContent = lastUpdated;
+
+      if (!uniqueRecent.length) {
+        recentList.innerHTML = `<div class="empty">최근 추가된 계정이 아직 없어요</div>`;
+        return;
+      }
+
+      recentList.innerHTML = uniqueRecent.map(item => `
+        <a class="recent-item" href="${item.accountUrl}" target="_blank" rel="noopener noreferrer">${item.id}</a>
+      `).join('');
+    }
+
+    function renderUpdated() {
+      if (!updatedAccounts.length) {
+        updatedList.innerHTML = `<div class="empty">최근 변경된 계정이 아직 없어요</div>`;
+        return;
+      }
+
+      updatedList.innerHTML = updatedAccounts.map(item => `
+        <article class="updated-item">
+          <p class="updated-main">${item.before} → ${item.after}</p>
+          <p class="updated-note">${item.note}</p>
+        </article>
+      `).join('');
+    }
+
+    function renderAlphabetGroups(items) {
+      const uniqueSorted = getSortedAccounts(getUniqueAccounts(items));
+      const groups = {};
+
+      uniqueSorted.forEach(item => {
+        const key = getGroupKey(item.id);
+        if (!groups[key]) groups[key] = [];
+        groups[key].push(item);
+      });
+
+      const orderedKeys = [
+        ...Object.keys(groups).filter(key => key !== '#').sort(),
+        ...(groups['#'] ? ['#'] : [])
+      ];
+
+      if (!orderedKeys.length) {
+        alphabetGroupList.innerHTML = `<div class="empty">표시할 계정이 없어요</div>`;
+        return;
+      }
+
+      alphabetGroupList.innerHTML = orderedKeys.map(key => `
+        <section>
+          <h3 class="group-title">${key}</h3>
+          <div class="group-items">
+            ${groups[key].map(item => `
+              <a class="group-chip" href="${item.accountUrl}" target="_blank" rel="noopener noreferrer">${item.id}</a>
+            `).join('')}
+          </div>
+        </section>
+      `).join('');
+    }
+
+    function render(items) {
+      items = getUniqueAccounts(items);
+
+      countBox.textContent = `${items.length}개`;
+      totalCount.textContent = `${items.length}명`;
+
+      if (!items.length) {
+        list.innerHTML = `<div class="empty">검색 결과가 없어요</div>`;
+        renderAlphabetGroups([]);
+        return;
+      }
+
+      const sortedItems = getSortedAccounts(items);
+
+      list.innerHTML = sortedItems.map(item => `
+        <article class="card">
+          <div class="left">
+            <h2 class="handle">${item.id}</h2>
+          </div>
+          <div class="actions">
+            <a class="btn" href="${item.accountUrl}" target="_blank" rel="noopener noreferrer">
+              계정 보기
+            </a>
+          </div>
+        </article>
+      `).join('');
+
+      renderAlphabetGroups(sortedItems);
+    }
+
+    function renderCompareResult(matches, totalInputCount) {
+      if (!totalInputCount) {
+        compareResult.innerHTML = '';
+        return;
+      }
+
+      if (!matches.length) {
+        compareResult.innerHTML = `
+          <p class="compare-result-count">일치하는 계정이 없어요</p>
+        `;
+        return;
+      }
+
+      compareResult.innerHTML = `
+        <p class="compare-result-count">일치하는 계정 ${matches.length}명</p>
+        <div class="compare-result-list">
+          ${matches.map(item => `
+            <a class="recent-item" href="${item.accountUrl}" target="_blank" rel="noopener noreferrer">${item.id}</a>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function compareAccounts() {
+      const raw = compareInput.value.trim();
+
+      if (!raw) {
+        compareResult.innerHTML = `
+          <p class="compare-result-count">비교할 아이디를 붙여넣어 주세요</p>
+        `;
+        return;
+      }
+
+      const tokens = raw
+        .split(/[\s,]+/)
+        .map(token => normalizeId(token))
+        .filter(Boolean);
+
+      const uniqueTokens = [...new Set(tokens)];
+      const accountMap = new Map(
+        getUniqueAccounts(accounts).map(item => [normalizeId(item.id), item])
+      );
+
+      const matches = uniqueTokens
+        .filter(token => accountMap.has(token))
+        .map(token => accountMap.get(token));
+
+      renderCompareResult(matches, uniqueTokens.length);
+    }
+
+    searchInput.addEventListener('input', (e) => {
+      const keyword = normalizeId(e.target.value);
+
+      const filtered = !keyword
+        ? accounts
+        : accounts.filter(item => normalizeId(item.id).includes(keyword));
+
+      render(filtered);
+    });
+
+    compareBtn.addEventListener('click', compareAccounts);
+
+    clearCompareBtn.addEventListener('click', () => {
+      compareInput.value = '';
+      compareResult.innerHTML = '';
+    });
+
+    renderRecent();
+    renderUpdated();
+    render(accounts);
+  </script>
+</body>
+</html>
