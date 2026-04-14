@@ -2,7 +2,7 @@
   "name": "LadyCheck",
   "short_name": "LadyCheck",
   "start_url": "/",
-  "display": "standalone",
+  "display": "browser",
   "background_color": "#ffffff",
   "theme_color": "#7c3aed",
   "icons": [
