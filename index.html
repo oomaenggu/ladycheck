@@ -539,21 +539,12 @@
 
   <script>
     // ✅ 직접 수정하는 부분
-    const lastUpdated = "2026.04.18";
-    const recentAddedCount = 8;
+    const lastUpdated = "2026.04.21";
+    const recentAddedCount = 28;
 
     // ✅ 최근 변경된 계정
     // note는 네가 직접 수정
     const updatedAccounts = [
-  {
-    before: "@yeditor_j",
-    after: "@yeditor_i",
-    note: "아이디 변경"
-},  {
-    before: "@somewhere_1101",
-    after: "@withyoualways93",
-    note: "아이디 변경"
-  }
 ];
 
     // ✅ 기존 누적 리스트
@@ -1679,12 +1670,7 @@ accountUrl: "https://x.com/TheObserverLee"
   },{
     id: "@geekstagram_",
     accountUrl: "https://x.com/geekstagram_"
-  }
-    ];
-
-    // ✅ 최근 추가 리스트
-    const accounts2 = [
-      {
+  },{
     id: "@3500cat",
     accountUrl: "https://x.com/3500cat"
   },{
@@ -1708,6 +1694,95 @@ accountUrl: "https://x.com/TheObserverLee"
   },{
     id: "@azzzzzzusa",
     accountUrl: "https://x.com/azzzzzzusa"
+  }
+    ];
+
+    // ✅ 최근 추가 리스트
+    const accounts2 = [
+{
+    id: "@mad_dogdebt",
+    accountUrl: "https://x.com/mad_dogdebt"
+  },{
+    id: "@outlander71382",
+    accountUrl: "https://x.com/outlander71382"
+  },{
+    id: "@JaeGongJeong",
+    accountUrl: "https://x.com/JaeGongJeong"
+  },{
+    id: "@Despairstory",
+    accountUrl: "https://x.com/Despairstory"
+  },{
+    id: "@heajin98",
+    accountUrl: "https://x.com/heajin98"
+  },{
+    id: "@ju0lee77",
+    accountUrl: "https://x.com/ju0lee77"
+  },{
+    id: "@alcoholmiin",
+    accountUrl: "https://x.com/alcoholmiin"
+  },{
+    id: "@zzaloo",
+    accountUrl: "https://x.com/zzaloo"
+  },{
+    id: "@hmmmmmm1458",
+    accountUrl: "https://x.com/hmmmmmm1458"
+  },{
+    id: "@Rococo1617",
+    accountUrl: "https://x.com/Rococo1617"
+  },{
+    id: "@3500cat",
+    accountUrl: "https://x.com/3500cat"
+  },{
+    id: "@chikichiki803",
+    accountUrl: "https://x.com/chikichiki803"
+  },{
+    id: "@nyanyanyan54576",
+    accountUrl: "https://x.com/nyanyanyan54576"
+  },{
+    id: "@stone0tak",
+    accountUrl: "https://x.com/stone0tak"
+  },{
+    id: "@vkffksxldj2030",
+    accountUrl: "https://x.com/vkffksxldj2030"
+  },{
+    id: "@paranhanelnalza",
+    accountUrl: "https://x.com/paranhanelnalza"
+  },{
+    id: "@sontm730",
+    accountUrl: "https://x.com/sontm730"
+  },{
+    id: "@KKJJ8686",
+    accountUrl: "https://x.com/KKJJ8686"
+  },{
+    id: "@wiriness",
+    accountUrl: "https://x.com/wiriness"
+  },{
+    id: "@pesante365",
+    accountUrl: "https://x.com/pesante365"
+  },{
+    id: "@hsp_radio",
+    accountUrl: "https://x.com/hsp_radio"
+  },{
+    id: "@FatTailLabs",
+    accountUrl: "https://x.com/FatTailLabs"
+  },{
+    id: "@eseudeo6969",
+    accountUrl: "https://x.com/eseudeo6969"
+  },{
+    id: "@plain_psycho",
+    accountUrl: "https://x.com/plain_psycho"
+  },{
+    id: "@daryfromstar080",
+    accountUrl: "https://x.com/daryfromstar080"
+  },{
+    id: "@1114",
+    accountUrl: "https://x.com/1114"
+  },{
+    id: "@GONOGO_Korea",
+    accountUrl: "https://x.com/GONOGO_Korea"
+  },{
+    id: "@jongy064",
+    accountUrl: "https://x.com/jongy064"
   }
     ];
 
@@ -1760,7 +1835,7 @@ accountUrl: "https://x.com/TheObserverLee"
     }
 
     function renderRecent() {
-      const uniqueRecent = getUniqueAccounts(accounts2).slice(-20).reverse();
+      const uniqueRecent = getUniqueAccounts(accounts2).slice(-30).reverse();
 
       recentCount.textContent = `${recentAddedCount}명`;
       updatedDate.textContent = lastUpdated;
