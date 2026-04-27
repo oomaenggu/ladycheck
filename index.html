@@ -1,579 +1,368 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-
-<link rel="icon" href="/favicon-v2.ico">
-<link rel="apple-touch-icon" href="/apple-touch-icon-v2.png">
-<link rel="manifest" href="/manifest.json?v=2">
-
-<meta name="theme-color" content="#7c3aed">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ladycheck</title>
 
-  <style>
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
-      background: #f6f7fb;
-      color: #1f2937;
-    }
-
-    .wrap {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 40px 20px 80px;
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 6px 12px;
-      border-radius: 999px;
-      background: #eef2ff;
-      color: #4338ca;
-      font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 14px;
-    }
-
-    h1 {
-      margin: 0 0 10px;
-      font-size: 32px;
-      line-height: 1.2;
-    }
-
-    .sub {
-      margin: 0;
-      color: #6b7280;
-      line-height: 1.7;
-      max-width: 760px;
-    }
-
-    .info-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-      margin: 24px 0 20px;
-    }
-
-    .info-card,
-    .compare-box,
-    .group-box {
-      background: white;
-      border: 1px solid #e5e7eb;
-      border-radius: 18px;
-      padding: 16px;
-      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
-    }
-
-    .info-label {
-      margin: 0 0 8px;
-      font-size: 13px;
-      color: #6b7280;
-      font-weight: 700;
-    }
-
-    .info-value {
-      margin: 0;
-      font-size: 22px;
-      font-weight: 800;
-      word-break: break-word;
-    }
-
-    .toolbar {
-      margin: 10px 0 18px;
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .search {
-      flex: 1;
-      min-width: 240px;
-      padding: 14px 16px;
-      border: 1px solid #d1d5db;
-      border-radius: 16px;
-      background: white;
-      font-size: 15px;
-      outline: none;
-    }
-
-    .search:focus,
-    .compare-textarea:focus {
-      border-color: #818cf8;
-      box-shadow: 0 0 0 4px rgba(129, 140, 248, 0.15);
-    }
-
-    .count {
-      display: flex;
-      align-items: center;
-      padding: 0 14px;
-      border-radius: 16px;
-      background: white;
-      border: 1px solid #e5e7eb;
-      color: #4b5563;
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    .section-title {
-      margin: 28px 0 14px;
-      font-size: 18px;
-      font-weight: 800;
-    }
-
-    .fold-box {
-      margin-top: 28px;
-    }
-
-    .fold-box summary {
-      list-style: none;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    .fold-box summary::-webkit-details-marker {
-      display: none;
-    }
-
-    .fold-summary {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .fold-summary .section-title {
-      margin: 0;
-    }
-
-    .fold-arrow {
-      font-size: 14px;
-      color: #6b7280;
-      transition: transform 0.2s ease;
-      flex-shrink: 0;
-    }
-
-    .fold-box[open] .fold-arrow {
-      transform: rotate(180deg);
-    }
-
-    .fold-content {
-      margin-top: 14px;
-    }
-
-    .recent-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 8px;
-    }
-
-    .recent-item {
-      display: inline-flex;
-      align-items: center;
-      padding: 10px 14px;
-      border-radius: 999px;
-      background: white;
-      border: 1px solid #e5e7eb;
-      color: #374151;
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 700;
-      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04);
-    }
-
-    .recent-item:hover {
-      transform: translateY(-1px);
-    }
-
-    .updated-list {
-      display: grid;
-      gap: 10px;
-      margin-bottom: 8px;
-    }
-
-    .updated-item {
-      background: white;
-      border: 1px solid #e5e7eb;
-      border-radius: 16px;
-      padding: 14px 16px;
-      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04);
-    }
-
-    .updated-main {
-      font-size: 14px;
-      font-weight: 800;
-      color: #1f2937;
-      margin: 0 0 6px;
-      word-break: break-all;
-    }
-
-    .updated-note {
-      margin: 0;
-      font-size: 13px;
-      color: #6b7280;
-      line-height: 1.5;
-      word-break: break-word;
-    }
-
-    .compare-box {
-      margin-top: 10px;
-    }
-
-    .compare-desc {
-      margin: 0 0 12px;
-      color: #6b7280;
-      line-height: 1.6;
-      font-size: 14px;
-    }
-
-    .compare-textarea {
-      width: 100%;
-      min-height: 140px;
-      resize: vertical;
-      padding: 14px 16px;
-      border: 1px solid #d1d5db;
-      border-radius: 16px;
-      background: #fff;
-      font-size: 14px;
-      outline: none;
-      font-family: inherit;
-    }
-
-    .compare-actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 12px;
-    }
-
-    .btn,
-    .btn-secondary {
-      border: none;
-      text-decoration: none;
-      padding: 11px 14px;
-      border-radius: 14px;
-      font-size: 14px;
-      font-weight: 700;
-      white-space: nowrap;
-      cursor: pointer;
-      transition: transform .15s ease, box-shadow .15s ease;
-    }
-
-    .btn {
-      background: #111827;
-      color: white;
-    }
-
-    .btn-secondary {
-      background: #eef2ff;
-      color: #4338ca;
-    }
-
-    .btn:hover,
-    .btn-secondary:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 10px 20px rgba(0,0,0,.08);
-    }
-
-    .compare-result {
-      margin-top: 14px;
-    }
-
-    .compare-result-count {
-      margin: 0 0 12px;
-      font-size: 15px;
-      font-weight: 800;
-    }
-
-    .compare-result-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .group-list {
-      display: grid;
-      gap: 16px;
-    }
-
-    .group-title {
-      margin: 0 0 10px;
-      font-size: 16px;
-      font-weight: 800;
-      color: #4338ca;
-    }
-
-    .group-items {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .group-chip {
-      display: inline-flex;
-      align-items: center;
-      padding: 9px 13px;
-      border-radius: 999px;
-      background: #f8fafc;
-      border: 1px solid #e5e7eb;
-      color: #374151;
-      font-size: 14px;
-      font-weight: 700;
-      text-decoration: none;
-    }
-
-    .list {
-      display: grid;
-      gap: 14px;
-      grid-template-columns: 1fr;
-      margin-top: 14px;
-    }
-
-    .card {
-      background: white;
-      border: 1px solid #e5e7eb;
-      border-radius: 22px;
-      padding: 20px;
-      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      align-items: center;
-    }
-
-    .left {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .handle {
-      margin: 0;
-      font-size: 22px;
-      font-weight: 800;
-      word-break: break-all;
-    }
-
-    .actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      flex-shrink: 0;
-    }
-
-    .empty {
-      text-align: center;
-      padding: 24px 20px;
-      border: 1px dashed #cbd5e1;
-      border-radius: 22px;
-      background: rgba(255,255,255,.8);
-      color: #6b7280;
-    }
-
-    .footer {
-      margin-top: 18px;
-      color: #9ca3af;
-      font-size: 13px;
-      line-height: 1.6;
-    }
-
-    @media (min-width: 900px) {
-      .list {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      h1 {
-        font-size: 38px;
-      }
-
-      .handle {
-        font-size: 24px;
-      }
-
-      .search {
-        max-width: 420px;
-      }
-    }
-
-    @media (max-width: 720px) {
-      .wrap {
-        padding: 28px 16px 60px;
-      }
-
-      .info-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .card {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .actions {
-        width: 100%;
-      }
-
-      .btn,
-      .btn-secondary {
-        flex: 1;
-        text-align: center;
-      }
-
-      h1 {
-        font-size: 26px;
-      }
-
-      .handle {
-        font-size: 20px;
-      }
-
-      .info-value {
-        font-size: 20px;
-      }
-    }
-  </style>
+<style>
+*{box-sizing:border-box;}
+:root{
+--bg:#faf7ff;
+--card:#fff;
+--main:#7c3aed;
+--main-soft:#ede9fe;
+--text:#1f1f29;
+--muted:#777487;
+--line:#e8e2f5;
+--danger:#ef4444;
+--change:#d97706;
+--shadow:0 8px 24px rgba(124,58,237,.08);
+}
+body{
+margin:0;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans KR",sans-serif;
+background:var(--bg);
+color:var(--text);
+line-height:1.5;
+}
+.wrap{
+width:min(760px,100%);
+margin:0 auto;
+padding:24px 16px 60px;
+}
+header{text-align:center;padding:12px 0 24px;}
+.title{margin:0;font-size:34px;font-weight:800;color:var(--main);}
+.subtitle{margin:8px 0 0;font-size:14px;color:var(--muted);}
+.update-date{
+display:inline-block;
+margin-top:14px;
+padding:6px 12px;
+border-radius:999px;
+background:var(--main-soft);
+color:var(--main);
+font-size:13px;
+font-weight:700;
+}
+.search-box{
+position:sticky;
+top:0;
+z-index:10;
+padding:10px 0 16px;
+background:linear-gradient(to bottom,var(--bg) 80%,transparent);
+}
+.search-wrap{
+position:relative;
+display:flex;
+align-items:center;
+}
+.search-icon{
+position:absolute;
+left:16px;
+width:18px;
+height:18px;
+color:var(--muted);
+pointer-events:none;
+flex-shrink:0;
+}
+.search-input{
+width:100%;
+padding:15px 16px 15px 44px;
+border:1px solid var(--line);
+border-radius:18px;
+font-size:16px;
+outline:none;
+transition:border-color .2s;
+background:var(--card);
+}
+.search-input:focus{
+border-color:var(--main);
+}
+.search-help{margin:8px 4px 0;font-size:12px;color:var(--muted);}
+.section{
+margin-top:16px;
+background:var(--card);
+border:1px solid var(--line);
+border-radius:22px;
+overflow:hidden;
+box-shadow:var(--shadow);
+}
+.section summary{
+cursor:pointer;
+list-style:none;
+padding:18px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+font-weight:800;
+}
+.section summary::-webkit-details-marker{display:none;}
+.arrow{
+width:20px;
+height:20px;
+flex-shrink:0;
+color:var(--muted);
+transition:transform .25s ease;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+.arrow svg{
+width:16px;
+height:16px;
+stroke:currentColor;
+stroke-width:2.5;
+stroke-linecap:round;
+stroke-linejoin:round;
+fill:none;
+}
+details[open] .arrow{transform:rotate(180deg);}
+.section-body{
+padding:14px;
+border-top:1px solid var(--line);
+}
+.badge{
+display:inline-block;
+padding:2px 8px;
+border-radius:999px;
+background:var(--main);
+color:#fff;
+font-size:12px;
+font-weight:700;
+margin-left:6px;
+}
+.account-list{
+display:grid;
+gap:8px;
+padding:0;
+margin:0;
+list-style:none;
+}
+.account-item{
+display:flex;
+justify-content:space-between;
+gap:10px;
+padding:12px;
+border:1px solid var(--line);
+border-radius:14px;
+background:#fff;
+}
+.account-id{
+font-weight:800;
+word-break:break-all;
+text-decoration:none;
+color:inherit;
+}
+.account-meta{
+font-size:12px;
+color:var(--muted);
+white-space:nowrap;
+}
+.status-added{color:var(--main);font-weight:800;}
+.status-old{color:#64748b;font-weight:800;}
+.alphabet-grid{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(58px,1fr));
+gap:8px;
+margin-bottom:14px;
+}
+.alphabet-btn{
+border:1px solid var(--line);
+background:var(--main-soft);
+color:var(--main);
+padding:10px 6px;
+border-radius:14px;
+font-weight:800;
+cursor:pointer;
+transition:background .15s, color .15s;
+}
+.alphabet-btn:hover{
+background:var(--main);
+color:#fff;
+}
+.alphabet-group{
+margin-top:14px;
+padding-top:10px;
+border-top:1px dashed var(--line);
+}
+.alphabet-heading{
+margin:0 0 8px;
+color:var(--main);
+}
+textarea{
+width:100%;
+min-height:150px;
+padding:14px;
+border:1px solid var(--line);
+border-radius:16px;
+resize:vertical;
+font-family:inherit;
+font-size:14px;
+outline:none;
+}
+.btn-row{
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+margin-top:10px;
+}
+.action-btn,.sub-btn{
+border:0;
+padding:11px 14px;
+border-radius:14px;
+font-weight:800;
+cursor:pointer;
+}
+.action-btn{background:var(--main);color:#fff;}
+.sub-btn{background:var(--main-soft);color:var(--main);}
+.result-box{
+display:none;
+margin-top:12px;
+padding:12px;
+border-radius:14px;
+background:#fbfaff;
+border:1px solid var(--line);
+}
+.notice{
+margin-top:16px;
+padding:16px;
+border-radius:20px;
+background:#fff;
+border:1px solid var(--line);
+font-size:13px;
+color:var(--muted);
+}
+.change-item{
+padding:12px;
+border:1px solid var(--line);
+border-radius:14px;
+background:#fff;
+margin-bottom:8px;
+}
+.change-top{
+font-weight:800;
+word-break:break-all;
+}
+.change-arrow{
+color:var(--change);
+padding:0 6px;
+}
+.change-note{
+margin-top:4px;
+font-size:12px;
+color:var(--muted);
+}
+.empty{
+padding:16px;
+text-align:center;
+color:var(--muted);
+}
+mark{
+background:#fef3c7;
+padding:0 2px;
+border-radius:4px;
+}
+@media(max-width:480px){
+.account-item{flex-direction:column;align-items:flex-start;}
+}
+</style>
 </head>
+
 <body>
-  <div class="wrap">
-    <section class="hero">
-      <div class="badge">ladycheck</div>
-      <h1>레이디지키미 계정 리스트</h1>
-      <p class="sub">
-        레이디지키미에 올라온 계정들을 정리한 리스트입니다.<br>
-        지속적으로 업데이트되며, 제보는 스핀스핀으로 받고 있습니다.
-      </p>
-    </section>
+<main class="wrap">
 
-    <section class="info-grid">
-      <article class="info-card">
-        <p class="info-label">총 등록 계정</p>
-        <p class="info-value" id="totalCount">0명</p>
-      </article>
-      <article class="info-card">
-        <p class="info-label">최근 업데이트</p>
-        <p class="info-value" id="updatedDate">2026.04.11</p>
-      </article>
-      <article class="info-card">
-        <p class="info-label">최근 추가</p>
-        <p class="info-value" id="recentCount">0명</p>
-      </article>
-    </section>
+<header>
+<h1 class="title">ladycheck</h1>
+<p class="subtitle">레이디지키미 / 지킴이 기반 계정 확인 리스트</p>
+<div class="update-date">마지막 업데이트: 2026.04.27</div>
+</header>
 
-    <section>
-      <div class="toolbar">
-        <input id="searchInput" class="search" type="text" placeholder="아이디 검색" />
-        <div class="count" id="countBox">0개</div>
-      </div>
-    </section>
-
-    <details class="fold-box" open>
-      <summary class="fold-summary">
-        <h2 class="section-title">🆕 최근 추가된 계정</h2>
-        <span class="fold-arrow">▼</span>
-      </summary>
-      <div class="fold-content">
-        <div class="recent-list" id="recentList"></div>
-      </div>
-    </details>
-
-    <details class="fold-box">
-      <summary class="fold-summary">
-        <h2 class="section-title">🔄 최근 변경된 계정</h2>
-        <span class="fold-arrow">▼</span>
-      </summary>
-      <div class="fold-content">
-        <div class="updated-list" id="updatedList"></div>
-      </div>
-    </details>
-
-    <details class="fold-box">
-      <summary class="fold-summary">
-        <h2 class="section-title">🔍 내 팔로잉 대조하기</h2>
-        <span class="fold-arrow">▼</span>
-      </summary>
-      <div class="fold-content">
-        <div class="compare-box">
-          <p class="compare-desc">
-            팔로잉 목록의 아이디들을 복사해서 붙여넣어 보세요.<br>
-            줄바꿈, 쉼표, 공백으로 구분해도 자동으로 비교됩니다.
-          </p>
-          <textarea
-            id="compareInput"
-            class="compare-textarea"
-            placeholder="@아이디1&#10;@아이디2&#10;아이디3"
-          ></textarea>
-          <div class="compare-actions">
-            <button class="btn" id="compareBtn" type="button">대조하기</button>
-            <button class="btn-secondary" id="clearCompareBtn" type="button">지우기</button>
-          </div>
-          <div class="compare-result" id="compareResult"></div>
-        </div>
-      </div>
-    </details>
-
-    <details class="fold-box">
-      <summary class="fold-summary">
-        <h2 class="section-title">🔠 알파벳별 정리</h2>
-        <span class="fold-arrow">▼</span>
-      </summary>
-      <div class="fold-content">
-        <div class="group-box">
-          <div class="group-list" id="alphabetGroupList"></div>
-        </div>
-      </div>
-    </details>
-
-    <section>
-      <h2 class="section-title">📌 전체 계정 리스트</h2>
-      <div class="list" id="list"></div>
-    </section>
-
-    <p class="footer"></p>
+<div class="search-box">
+  <div class="search-wrap">
+    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="8"/>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+    <input id="searchInput" class="search-input" type="search" placeholder="아이디 검색">
   </div>
+  <p class="search-help">아이디만 검색 가능합니다.</p>
+</div>
 
-  <script>
-    // ✅ 직접 수정하는 부분
-    const lastUpdated = "2026.04.25";
-    const recentAddedCount = 19;
+<details class="section" open>
+<summary>
+<span>최근 추가된 계정 <span id="recentAddedCount" class="badge">0</span></span>
+<span class="arrow">
+  <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+</span>
+</summary>
+<div class="section-body">
+<ul id="recentAddedList" class="account-list"></ul>
+</div>
+</details>
 
-    // ✅ 최근 변경된 계정
-    // note는 네가 직접 수정
-    const updatedAccounts = [  
-  {
-    before: "@00wecandoit00",
-    after: "@ton618devv",
-    note: "아이디 변경"
-  },{
-    before: "@um_pp2",
-    after: "@aoaogod1",
-    note: "아이디 변경"
-  },{
-    before: "@HelelelIng",
-    after: "@filmlover_kr",
-    note: "아이디 변경"
-  },{
-    before: "@debsidney29",
-    after: "@orangedanji55",
-    note: "아이디 변경"
-  },{
-    before: "@daryfromstar080",
-    after: "@4baeja",
-    note: "아이디 변경"
-  },{
-    before: "@captno1",
-    after: "@dogis_archive",
-    note: "아이디 변경"
-  }
-];
+<details class="section">
+<summary>
+<span>최근 변경 / 삭제 계정 <span id="recentChangedCount" class="badge">0</span></span>
+<span class="arrow">
+  <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+</span>
+</summary>
+<div class="section-body" id="recentChangedList"></div>
+</details>
 
-    // ✅ 기존 누적 리스트
-    const accounts1 = [
+<details class="section">
+<summary>
+<span>내 팔로잉 대조하기</span>
+<span class="arrow">
+  <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+</span>
+</summary>
+<div class="section-body">
+<textarea id="followingInput" placeholder="내 팔로잉 아이디 목록 붙여넣기"></textarea>
+<div class="btn-row">
+<button class="action-btn" onclick="compareFollowing()">대조하기</button>
+<button class="sub-btn" onclick="clearCompare()">초기화</button>
+</div>
+<div id="compareResult" class="result-box"></div>
+</div>
+</details>
+
+<details class="section" open>
+<summary>
+<span>알파벳별 정리 <span id="alphabetCount" class="badge">0</span></span>
+<span class="arrow">
+  <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+</span>
+</summary>
+<div class="section-body">
+<div id="alphabetNav" class="alphabet-grid"></div>
+<div id="alphabetGroups"></div>
+</div>
+</details>
+
+<details class="section">
+<summary>
+<span>전체 계정 리스트 <span id="totalCount" class="badge">0</span></span>
+<span class="arrow">
+  <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+</span>
+</summary>
+<div class="section-body">
+<ul id="allAccountList" class="account-list"></ul>
+</div>
+</details>
+
+<section class="notice">
+<strong>안내</strong><br>
+레이디체크는 공개적으로 확인 가능한 계정 정보를 기반으로 정리됩니다.<br>
+오류 제보 / 추가 제보 / 삭제 요청은 멘션, DM, 스핀으로 보내주세요.<br>
+등록 기준에 맞지 않는 제보는 반영되지 않을 수 있습니다.
+</section>
+
+</main>
+
+<script>
+const accounts1 = [
       {
         id: "@minto_000_",
         accountUrl: "https://x.com/minto_000_"
@@ -1788,12 +1577,7 @@ accountUrl: "https://x.com/TheObserverLee"
   },{
     id: "@jongy064",
     accountUrl: "https://x.com/jongy064"
-  }
-    ];
-
-    // ✅ 최근 추가 리스트
-    const accounts2 = [
-{
+  },{
     id: "@edge_marketer",
     accountUrl: "https://x.com/edge_marketer"
   },{
@@ -1852,217 +1636,188 @@ accountUrl: "https://x.com/TheObserverLee"
     accountUrl: "https://x.com/1987_TSLA"
   }
     ];
+    
+const accounts2 = [
+{
+    id: "@ImagesofKorea",
+    accountUrl: "https://x.com/ImagesofKorea"
+  },{
+    id: "@momondinn",
+    accountUrl: "https://x.com/momondinn"
+  },{
+    id: "@youdiegasaekki",
+    accountUrl: "https://x.com/youdiegasaekki"
+  },{
+    id: "@slowseola",
+    accountUrl: "https://x.com/slowseola"
+  },{
+    id: "@Golden_mystar",
+    accountUrl: "https://x.com/Golden_mystar"
+  },{
+    id: "@yeonsooKim0057",
+    accountUrl: "https://x.com/yeonsooKim0057"
+  },{
+    id: "@morrisoi37",
+    accountUrl: "https://x.com/morrisoi37"
+  },{
+    id: "@shinysmile88",
+    accountUrl: "https://x.com/shinysmile88"
+  },{
+    id: "@kkkbtc1",
+    accountUrl: "https://x.com/kkkbtc1"
+  },{
+    id: "@kokojiwon2",
+    accountUrl: "https://x.com/kokojiwon2"
+  },{
+    id: "@Scali_up",
+    accountUrl: "https://x.com/Scali_up"
+  },{
+    id: "@Timosee233806",
+    accountUrl: "https://x.com/Timosee233806"
+  },{
+    id: "@PMdGx8S40D78891",
+    accountUrl: "https://x.com/PMdGx8S40D78891"
+  },{
+    id: "@zmrSsyWDgQK46Ks",
+    accountUrl: "https://x.com/zmrSsyWDgQK46Ks"
+  },{
+    id: "@nimpu1021",
+    accountUrl: "https://x.com/nimpu1021"
+  },{
+    id: "@nal_llo",
+    accountUrl: "https://x.com/nal_llo"
+  }
+    ];
 
-    const accounts = [...accounts1, ...accounts2];
+const updatedAccounts = [
+// ✅ 최근 변경된 계정
+  {
+    before: "@00wecandoit00",
+    after: "@ton618devv",
+    note: "아이디 변경"
+  },{
+    before: "@um_pp2",
+    after: "@aoaogod1",
+    note: "아이디 변경"
+  },{
+    before: "@HelelelIng",
+    after: "@filmlover_kr",
+    note: "아이디 변경"
+  },{
+    before: "@debsidney29",
+    after: "@orangedanji55",
+    note: "아이디 변경"
+  },{
+    before: "@daryfromstar080",
+    after: "@4baeja",
+    note: "아이디 변경"
+  },{
+    before: "@captno1",
+    after: "@dogis_archive",
+    note: "아이디 변경"
+  }
+];
 
-    const list = document.getElementById('list');
-    const searchInput = document.getElementById('searchInput');
-    const countBox = document.getElementById('countBox');
-    const totalCount = document.getElementById('totalCount');
-    const updatedDate = document.getElementById('updatedDate');
-    const recentCount = document.getElementById('recentCount');
-    const recentList = document.getElementById('recentList');
-    const updatedList = document.getElementById('updatedList');
+const today="2026.04.27";
+const RECENT_LIMIT=30;
 
-    const compareInput = document.getElementById('compareInput');
-    const compareBtn = document.getElementById('compareBtn');
-    const clearCompareBtn = document.getElementById('clearCompareBtn');
-    const compareResult = document.getElementById('compareResult');
-    const alphabetGroupList = document.getElementById('alphabetGroupList');
+function normalizeId(value){
+return String(value||"")
+.trim()
+.replace(/^@/,"")
+.replace(/^https?:\/\/(x|twitter)\.com\//i,"")
+.split(/[/?#\s]/)[0]
+.toLowerCase();
+}
 
-    function normalizeId(value) {
-      return String(value).trim().replace(/^@+/, '').toLowerCase();
-    }
+const accounts=[
+...accounts1.map(v=>{
+const id=normalizeId(v.id);
+return{id,accountUrl:v.accountUrl||`https://x.com/${id}`,status:"old",note:"기존 등록",addedAt:"",updatedAt:""};
+}),
+...accounts2.map(v=>{
+const id=normalizeId(v.id);
+return{id,accountUrl:v.accountUrl||`https://x.com/${id}`,status:"added",note:"신규 등록",addedAt:today,updatedAt:today};
+})
+].filter((item,index,self)=>index===self.findIndex(v=>v.id===item.id));
 
-    function getUniqueAccounts(items) {
-      const uniqueMap = new Map();
+function highlight(text,keyword){
+if(!keyword) return text;
+const safe=keyword.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+return text.replace(new RegExp(safe,"ig"),m=>`<mark>${m}</mark>`);
+}
 
-      items.forEach(item => {
-        const key = normalizeId(item.id);
-        if (!uniqueMap.has(key)) {
-          uniqueMap.set(key, item);
-        }
-      });
+function accountItem(account,keyword=""){
+return `<li class="account-item">
+<a class="account-id" href="${account.accountUrl}" target="_blank">@${highlight(account.id,keyword)}</a>
+<span class="account-meta">${account.note}</span>
+</li>`;
+}
 
-      return Array.from(uniqueMap.values());
-    }
+function renderList(id,list,keyword=""){
+const el=document.getElementById(id);
+el.innerHTML=!list.length
+?`<li class="empty">표시할 계정이 없습니다.</li>`
+:list.map(v=>accountItem(v,keyword)).join("");
+}
 
-    function getSortedAccounts(items) {
-      return [...items].sort((a, b) => {
-        const aId = normalizeId(a.id);
-        const bId = normalizeId(b.id);
-        return aId.localeCompare(bId, 'en', { sensitivity: 'base' });
-      });
-    }
+function renderUpdated(){
+const el=document.getElementById("recentChangedList");
+document.getElementById("recentChangedCount").textContent=updatedAccounts.length;
+el.innerHTML=!updatedAccounts.length
+?`<div class="empty">표시할 계정이 없습니다.</div>`
+:updatedAccounts.map(v=>`<div class="change-item"><div class="change-top">${v.before}<span class="change-arrow">→</span>${v.after}</div><div class="change-note">${v.note}</div></div>`).join("");
+}
 
-    function getGroupKey(id) {
-      const normalized = normalizeId(id);
-      const firstChar = normalized.charAt(0).toUpperCase();
-      return /^[A-Z]$/.test(firstChar) ? firstChar : '#';
-    }
+function renderAlphabet(list,keyword=""){
+const sorted=[...list].sort((a,b)=>a.id.localeCompare(b.id));
+const groups={};
+sorted.forEach(v=>{
+const first=v.id.charAt(0).toUpperCase();
+const key=/^[A-Z]$/.test(first)?first:"#";
+if(!groups[key]) groups[key]=[];
+groups[key].push(v);
+});
+const keys=Object.keys(groups).sort();
+document.getElementById("alphabetCount").textContent=sorted.length;
+document.getElementById("alphabetNav").innerHTML=keys.map(key=>`<button class="alphabet-btn" onclick="document.getElementById('group-${key}').scrollIntoView({behavior:'smooth'})">${key} ${groups[key].length}</button>`).join("");
+document.getElementById("alphabetGroups").innerHTML=keys.map(key=>`<section id="group-${key}" class="alphabet-group"><h3 class="alphabet-heading">${key}</h3><ul class="account-list">${groups[key].map(v=>accountItem(v,keyword)).join("")}</ul></section>`).join("");
+}
 
-    function renderRecent() {
-      const uniqueRecent = getUniqueAccounts(accounts2).slice(-30).reverse();
+function render(){
+const keyword=normalizeId(document.getElementById("searchInput").value);
+const filtered=!keyword?accounts:accounts.filter(v=>v.id.includes(keyword));
+const recent=filtered.filter(v=>v.status==="added").slice(0,RECENT_LIMIT);
+document.getElementById("recentAddedCount").textContent=recent.length;
+document.getElementById("totalCount").textContent=filtered.length;
+renderList("recentAddedList",recent,keyword);
+renderList("allAccountList",filtered,keyword);
+renderAlphabet(filtered,keyword);
+renderUpdated();
+}
 
-      recentCount.textContent = `${recentAddedCount}명`;
-      updatedDate.textContent = lastUpdated;
+function compareFollowing(){
+const input=document.getElementById("followingInput").value;
+const ids=[...new Set(input.split(/[\n,\s]+/).map(normalizeId).filter(Boolean))];
+const registered=new Set(accounts.map(v=>v.id));
+const matched=ids.filter(v=>registered.has(v));
+const box=document.getElementById("compareResult");
+box.style.display="block";
+if(!ids.length){box.innerHTML="아이디를 입력해 주세요.";return;}
+if(!matched.length){box.innerHTML="일치하는 계정이 없습니다.";return;}
+box.innerHTML=`<strong>일치하는 계정 ${matched.length}개</strong><ul class="account-list" style="margin-top:10px;">${matched.map(id=>accountItem(accounts.find(v=>v.id===id))).join("")}</ul>`;
+}
 
-      if (!uniqueRecent.length) {
-        recentList.innerHTML = `<div class="empty">최근 추가된 계정이 아직 없어요</div>`;
-        return;
-      }
+function clearCompare(){
+document.getElementById("followingInput").value="";
+const box=document.getElementById("compareResult");
+box.style.display="none";
+box.innerHTML="";
+}
 
-      recentList.innerHTML = uniqueRecent.map(item => `
-        <a class="recent-item" href="${item.accountUrl}" target="_blank" rel="noopener noreferrer">${item.id}</a>
-      `).join('');
-    }
+document.getElementById("searchInput").addEventListener("input",render);
+render();
+</script>
 
-    function renderUpdated() {
-      if (!updatedAccounts.length) {
-        updatedList.innerHTML = `<div class="empty">최근 변경된 계정이 아직 없어요</div>`;
-        return;
-      }
-
-      updatedList.innerHTML = updatedAccounts.map(item => `
-        <article class="updated-item">
-          <p class="updated-main">${item.before} → ${item.after}</p>
-          <p class="updated-note">${item.note}</p>
-        </article>
-      `).join('');
-    }
-
-    function renderAlphabetGroups(items) {
-      const uniqueSorted = getSortedAccounts(getUniqueAccounts(items));
-      const groups = {};
-
-      uniqueSorted.forEach(item => {
-        const key = getGroupKey(item.id);
-        if (!groups[key]) groups[key] = [];
-        groups[key].push(item);
-      });
-
-      const orderedKeys = [
-        ...Object.keys(groups).filter(key => key !== '#').sort(),
-        ...(groups['#'] ? ['#'] : [])
-      ];
-
-      if (!orderedKeys.length) {
-        alphabetGroupList.innerHTML = `<div class="empty">표시할 계정이 없어요</div>`;
-        return;
-      }
-
-      alphabetGroupList.innerHTML = orderedKeys.map(key => `
-        <section>
-          <h3 class="group-title">${key}</h3>
-          <div class="group-items">
-            ${groups[key].map(item => `
-              <a class="group-chip" href="${item.accountUrl}" target="_blank" rel="noopener noreferrer">${item.id}</a>
-            `).join('')}
-          </div>
-        </section>
-      `).join('');
-    }
-
-    function render(items) {
-      items = getUniqueAccounts(items);
-
-      countBox.textContent = `${items.length}개`;
-      totalCount.textContent = `${items.length}명`;
-
-      if (!items.length) {
-        list.innerHTML = `<div class="empty">검색 결과가 없어요</div>`;
-        renderAlphabetGroups([]);
-        return;
-      }
-
-      const sortedItems = getSortedAccounts(items);
-
-      list.innerHTML = sortedItems.map(item => `
-        <article class="card">
-          <div class="left">
-            <h2 class="handle">${item.id}</h2>
-          </div>
-          <div class="actions">
-            <a class="btn" href="${item.accountUrl}" target="_blank" rel="noopener noreferrer">
-              계정 보기
-            </a>
-          </div>
-        </article>
-      `).join('');
-
-      renderAlphabetGroups(sortedItems);
-    }
-
-    function renderCompareResult(matches, totalInputCount) {
-      if (!totalInputCount) {
-        compareResult.innerHTML = '';
-        return;
-      }
-
-      if (!matches.length) {
-        compareResult.innerHTML = `
-          <p class="compare-result-count">일치하는 계정이 없어요</p>
-        `;
-        return;
-      }
-
-      compareResult.innerHTML = `
-        <p class="compare-result-count">일치하는 계정 ${matches.length}명</p>
-        <div class="compare-result-list">
-          ${matches.map(item => `
-            <a class="recent-item" href="${item.accountUrl}" target="_blank" rel="noopener noreferrer">${item.id}</a>
-          `).join('')}
-        </div>
-      `;
-    }
-
-    function compareAccounts() {
-      const raw = compareInput.value.trim();
-
-      if (!raw) {
-        compareResult.innerHTML = `
-          <p class="compare-result-count">비교할 아이디를 붙여넣어 주세요</p>
-        `;
-        return;
-      }
-
-      const tokens = raw
-        .split(/[\s,]+/)
-        .map(token => normalizeId(token))
-        .filter(Boolean);
-
-      const uniqueTokens = [...new Set(tokens)];
-      const accountMap = new Map(
-        getUniqueAccounts(accounts).map(item => [normalizeId(item.id), item])
-      );
-
-      const matches = uniqueTokens
-        .filter(token => accountMap.has(token))
-        .map(token => accountMap.get(token));
-
-      renderCompareResult(matches, uniqueTokens.length);
-    }
-
-    searchInput.addEventListener('input', (e) => {
-      const keyword = normalizeId(e.target.value);
-
-      const filtered = !keyword
-        ? accounts
-        : accounts.filter(item => normalizeId(item.id).includes(keyword));
-
-      render(filtered);
-    });
-
-    compareBtn.addEventListener('click', compareAccounts);
-
-    clearCompareBtn.addEventListener('click', () => {
-      compareInput.value = '';
-      compareResult.innerHTML = '';
-    });
-
-    renderRecent();
-    renderUpdated();
-    render(accounts);
-  </script>
 </body>
 </html>
