@@ -2234,6 +2234,21 @@ function clearCompare(){
 
 document.getElementById("searchInput").addEventListener("input", render);
 render();
+
+function updateRecentSection(){
+  const recent = document.getElementById("recentAddedSection");
+  if(!recent) return;
+
+  if(window.innerWidth >= 900){
+    recent.setAttribute("open", "");
+  } else {
+    recent.removeAttribute("open");
+  }
+}
+
+updateRecentSection();
+window.addEventListener("resize", updateRecentSection);
+
 </script>
 </body>
 </html>
